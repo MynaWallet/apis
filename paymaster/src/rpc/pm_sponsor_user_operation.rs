@@ -19,12 +19,12 @@ pub async fn pm_sponsor_user_operation(
     State(state): State<Arc<AppState>>,
     req: RpcRequest,
 ) -> Result<impl IntoResponse, ApiError> {
-    let sepolia = &state.sepolia_provider;
+    let provider = &state.provider;
     let params = req.params.as_ref().unwrap().as_array().unwrap();
     let (uop, entrypoint) = UserOperation::from(params)?;
 
     let params = (uop.clone().into(), entrypoint);
-    let res = sepolia
+    let res = provider
         .request::<(RpcUserOperation, String), EstimateUserOperationGasResult>(
             "eth_estimateUserOperationGas",
             params,

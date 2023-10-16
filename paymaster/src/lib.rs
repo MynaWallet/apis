@@ -56,18 +56,14 @@ pub async fn run() {
 
 pub struct AppState {
     pub signer: ethers::signers::LocalWallet,
-    pub mumbai_provider: Provider<Http>,
-    pub sepolia_provider: Provider<Http>,
-    pub goerli_provider: Provider<Http>,
+    pub provider: Provider<Http>,
 }
 
 impl AppState {
     pub fn load_from_config(config: &Config) -> Self {
         Self {
             signer: load_signer(config),
-            mumbai_provider: load_provider(config, "mumbai"),
-            sepolia_provider: load_provider(config, "sepolia"),
-            goerli_provider: load_provider(config, "goerli"),
+            provider: load_provider(config, config.NETWORK.as_str()),
         }
     }
 }

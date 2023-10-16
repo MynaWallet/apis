@@ -22,6 +22,7 @@ pub struct Config {
     pub GOERLI_ENDPOINT: String,
     pub SEPOLIA_ENDPOINT: String,
     pub PAYMATER_CONTRACT_ADDRESS: String,
+    pub NETWORK: String
 }
 
 impl Config {
@@ -33,6 +34,7 @@ impl Config {
             GOERLI_ENDPOINT: get_env("GOERLI_ENDPOINT")?,
             SEPOLIA_ENDPOINT: get_env("SEPOLIA_ENDPOINT")?,
             PAYMATER_CONTRACT_ADDRESS: get_env("PAYMATER_CONTRACT_ADDRESS")?,
+            NETWORK: get_env("NETWORK")?
         })
     }
 }
