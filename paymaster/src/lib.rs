@@ -1,19 +1,18 @@
 pub mod config;
 pub mod error;
-mod rpc;
+pub mod rpc;
 pub mod types;
-mod utils;
+pub mod utils;
 
 use axum::routing::post;
 use axum::{routing::get, Router};
-use config::{config, Config};
-use ethers::providers::{Http, Provider};
+use config::config;
 use hyper::Method;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use utils::{load_provider, load_signer};
+use types::app_state::AppState;
 
 pub async fn run() {
     // Setup tracing
@@ -52,18 +51,4 @@ pub async fn run() {
         .serve(router.into_make_service())
         .await
         .unwrap();
-}
-
-pub struct AppState {
-    pub signer: ethers::signers::LocalWallet,
-    pub provider: Provider<Http>,
-}
-
-impl AppState {
-    pub fn load_from_config(config: &Config) -> Self {
-        Self {
-            signer: load_signer(config),
-            provider: load_provider(config, config.NETWORK.as_str()),
-        }
-    }
 }

@@ -15,6 +15,8 @@ use crate::types::user_operation::{RpcUserOperation, UserOperation};
 use crate::utils::{load_paymaster_contract, load_signer};
 use crate::AppState;
 
+const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";
+
 pub async fn pm_sponsor_user_operation(
     State(state): State<Arc<AppState>>,
     req: RpcRequest,
@@ -40,12 +42,10 @@ pub async fn pm_sponsor_user_operation(
 
     let valid_until = U256::from(0);
     let valid_after = U256::from(Local::now().timestamp());
-    let address_zero = "0x0000000000000000000000000000000000000000"
-        .parse::<Address>()
-        .unwrap();
+    let address_zero = ADDRESS_ZERO.parse::<Address>().unwrap();
     let exchange_rate = U256::from(0);
 
-    let contract = load_paymaster_contract(config(), Arc::new(state.mumbai_provider.clone()));
+    let contract = load_paymaster_contract(config(), Arc::new(state.provider.clone()));
     let res = contract
         .method::<(UserOperation, U256, U256, Address, U256), FixedBytes>(
             "getHash",
